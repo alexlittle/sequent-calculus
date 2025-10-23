@@ -37,23 +37,19 @@ class SequentCalculus:
         line = f"{self.get_indent(level)}[Level {level}]$\;\; {self.to_katex(left)} \implies {self.to_katex(right)}$ - NON-ATOMIC AXIOM"
         return line
 
-    # Simplified rewrite_implications as it no longer needs to store lines, just return the result
     def rewrite_implications(self, expr):
         if isinstance(expr, str):
             return expr
         elif isinstance(expr, tuple):
             if len(expr) == 3 and expr[1] == '>':
-                # Base case for implication rewrite: A > B -> -A | B
                 new_left = self.rewrite_implications(expr[0])
                 new_right = self.rewrite_implications(expr[2])
                 return (('-', new_left), '|', new_right)
             elif len(expr) == 3:
-                # Recurse into binary connectives other than '>'
                 a = self.rewrite_implications(expr[0])
                 b = self.rewrite_implications(expr[2])
                 return (a, expr[1], b)
             elif len(expr) == 2 and expr[0] == '-':
-                # Recurse into negation
                 inner = self.rewrite_implications(expr[1])
                 return ('-', inner)
         return expr
@@ -65,21 +61,15 @@ class SequentCalculus:
             self.proof_lines = []
             self.top_level_rewrite_line = None
 
-            # Check if any rewriting is needed
             rewritten_left = set(self.rewrite_implications(f) for f in left)
             rewritten_right = set(self.rewrite_implications(f) for f in right)
 
-            # Check if the set of formulas changed after rewriting
             if left != rewritten_left or right != rewritten_right:
-                # Add the original sequent as the *conclusion* of the rewrite step
                 self.top_level_rewrite_line = self.format_line(level, left, right, '\\to r.w.')
 
-                # Update the formulas for the next level (the premise of the rewrite)
                 left = rewritten_left
                 right = rewritten_right
-                level += 1  # Start the main proof search at the next level
-
-        # --- Sequent Calculus Rules (now starting from the (potentially) rewritten sequent) ---
+                level += 1
 
         if left & right:
             line = self.format_axiom_line(level, left, right)
@@ -92,9 +82,6 @@ class SequentCalculus:
                 line = self.format_line(level, left, right, '\\neg \implies')
                 self.proof_lines.append(line)
                 return (sub_proof[0], left, right, "-L", f, sub_proof)
-
-        # ... (rest of the Sequent Calculus rules remain the same) ...
-        # NOTE: I'm only including the first rule for brevity, assume all rules below are unchanged.
 
         for f in right:
             if isinstance(f, tuple) and f[0] == '-':
@@ -139,26 +126,12 @@ class SequentCalculus:
 
     def write_to_file(self, filename):
         reversed_proof = list(reversed(self.proof_lines))
-
         output_lines = []
-
-        # If a top-level rewrite occurred, prepend it to the output list.
-        # This ensures it is the first line (Level 0 conclusion).
         if self.top_level_rewrite_line:
             output_lines.append(self.top_level_rewrite_line)
-            # The proof steps that follow are the premises of the rewrite.
             output_lines.extend(reversed_proof)
         else:
-            # If no rewrite, the reversed_proof starts with the Level 0 sequent.
             output_lines.extend(reversed_proof)
-
         with open(filename, 'w') as f:
             for line in output_lines:
                 f.write(line + '\n')
-
-sq = SequentCalculus()
-sq.prove({(('p','|','q'),'|','r'),(('-','p'),'|','s'),('-',('q','&',('-','s')))},{('r','|','s')})
-sq.write_to_file('proof3.md')
-
-print(sq.prove({('-',('p','&',('-','q')))},{('p','>',('q','|','p'))}))
-sq.write_to_file('proof2.md')
