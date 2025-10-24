@@ -1,4 +1,8 @@
-- [Level 0] $\;\; \neg (P \land  \neg Q) \implies (P \to  Q) _{[\to r.w.]}$
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+
+- [Level 0] $$\;\; \neg (P \land  \neg Q) \implies (P \to  Q) _{[\to r.w.]}$$
   - [Level 1] $\;\; \neg (P \land  \neg Q) \implies (\neg P \lor  Q) _{[\neg \implies]}$
     - [Level 2] $\;\;  \implies (P \land  \neg Q), (\neg P \lor  Q) _{[\implies \land]}$
       - [Level 3] $\;\;  \implies \neg Q, (\neg P \lor  Q) _{[\implies \neg]}$
