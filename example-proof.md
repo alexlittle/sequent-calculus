@@ -1,13 +1,9 @@
-
-<script type="text/javascript" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-
-- [Level 0] $$\;\; \neg (P \land  \neg Q) \implies (P \to  Q) _{[\to r.w.]}$$
+- [Level 0] $\;\; \neg (P \land  \neg Q) \implies (P \to  Q) _{[\to r.w.]}$
   - [Level 1] $\;\; \neg (P \land  \neg Q) \implies (\neg P \lor  Q) _{[\neg \implies]}$
     - [Level 2] $\;\;  \implies (P \land  \neg Q), (\neg P \lor  Q) _{[\implies \land]}$
       - [Level 3] $\;\;  \implies \neg Q, (\neg P \lor  Q) _{[\implies \neg]}$
         - [Level 4] $\;\; Q \implies (\neg P \lor  Q) _{[\implies \lor]}$
-          - [Level 5] $\;\; Q \implies Q, \neg P$ - AXIOM
-      - [Level 3] $\;\;  \implies P, (\neg P \lor  Q) _{[\implies \lor]}$
-        - [Level 4] $\;\;  \implies Q, P, \neg P _{[\implies \neg]}$
-          - [Level 5] $\;\; P \implies Q, P$ - AXIOM
+          - [Level 5] $\;\; Q \implies \neg P, Q$ - AXIOM
+      - [Level 3] $\;\;  \implies (\neg P \lor  Q), P _{[\implies \lor]}$
+        - [Level 4] $\;\;  \implies \neg P, P, Q _{[\implies \neg]}$
+          - [Level 5] $\;\; P \implies P, Q$ - AXIOM

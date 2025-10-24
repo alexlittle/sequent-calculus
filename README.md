@@ -17,3 +17,8 @@ sq.write_to_file('example-proof.md')
 ```
 
 The [created file](example-proof.md) can be viewed in many markdown readers showing the full logical symbols.
+
+## Improvements needed
+
+- would be great to have a better way to visualise the "split" sequents, when an expression gets divided in two so 
+they're on the same level
