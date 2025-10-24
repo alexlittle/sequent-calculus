@@ -16,4 +16,4 @@ sq.prove({('-',('p','&',('-','q')))},{('p','>','q')})
 sq.write_to_file('example-proof.md')
 ```
 
-The [created file]('example-proof.md') can be viewed in many markdown readers showing the full logical symbols.
+The [created file](example-proof.md) can be viewed in many markdown readers showing the full logical symbols.
