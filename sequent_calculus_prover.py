@@ -26,15 +26,15 @@ class SequentCalculus:
         return ('  ' * level) + '- '
 
     def format_line(self, level, left, right, rule):
-        line = f"{self.get_indent(level)}[Level {level}] $\;\; {self.to_katex(left)} \implies {self.to_katex(right)} _{{[{rule}]}}$"
+        line = f"{self.get_indent(level)}[Level {level}] $\space\space {self.to_katex(left)} \implies {self.to_katex(right)} _{{[{rule}]}}$"
         return line
 
     def format_axiom_line(self, level, left, right):
-        line = f"{self.get_indent(level)}[Level {level}] $\;\; {self.to_katex(left)} \implies {self.to_katex(right)}$ - AXIOM"
+        line = f"{self.get_indent(level)}[Level {level}] $\space\space {self.to_katex(left)} \implies {self.to_katex(right)}$ - AXIOM"
         return line
 
     def format_nonaxiom_line(self, level, left, right):
-        line = f"{self.get_indent(level)}[Level {level}] $\;\; {self.to_katex(left)} \implies {self.to_katex(right)}$ - NON-ATOMIC AXIOM"
+        line = f"{self.get_indent(level)}[Level {level}] $\space\space {self.to_katex(left)} \implies {self.to_katex(right)}$ - NON-ATOMIC AXIOM"
         return line
 
     def rewrite_implications(self, expr):
