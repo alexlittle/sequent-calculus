@@ -6,6 +6,8 @@ Updated version of Dr Brandon Bennett's Sequent Calculus Prover base on his [Goo
 
 - Includes rewriting sequents of the form $P\to Q$ to be $\neg P \lor Q$
 - Creates an output file, markdown and [KaTeX](https://katex.org/) format, in a hierarchical (list) structure
+- Added a method to accept strings of native format e.g. md=sq.prove_from_string('¬(𝑝∧𝑞)⇒(¬𝑝∨¬𝑞)' that returns markdown
+- Includes a Jupyter notebook to demonstrate a few proofs
 
 ## Example Usage
 
