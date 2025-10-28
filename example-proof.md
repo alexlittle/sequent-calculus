@@ -5,5 +5,5 @@
         - [Level 4] $\space\space Q \implies (\neg P \lor  Q) _{[\implies \lor]}$
           - [Level 5] $\space\space Q \implies Q, \neg P$ - AXIOM
       - [Level 3] $\space\space  \implies P, (\neg P \lor  Q) _{[\implies \lor]}$
-        - [Level 4] $\space\space  \implies Q, P, \neg P _{[\implies \neg]}$
-          - [Level 5] $\space\space P \implies Q, P$ - AXIOM
+        - [Level 4] $\space\space  \implies P, Q, \neg P _{[\implies \neg]}$
+          - [Level 5] $\space\space P \implies P, Q$ - AXIOM

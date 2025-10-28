@@ -1,6 +1,6 @@
 # Sequent Calculus Prover
 
-Updated version of Dr Brandon Bennett's Sequent Calculus Prover.
+Updated version of Dr Brandon Bennett's Sequent Calculus Prover base on his [Google Collab](https://colab.research.google.com/drive/1AtY3qY32nCcGYyaUeMkdYvZNGxrmj4bt#scrollTo=-qwIlSga7zvz)
 
 ## Basic updates...
 

@@ -1,3 +1,4 @@
+import re
 class SequentCalculus:
     symbol_map = {
         '|': '\lor ',
@@ -125,6 +126,19 @@ class SequentCalculus:
         return (False, left, right, "Atomic non-axiom!")
 
     def write_to_file(self, filename):
+        # PW amended to separate the markdown from the file writing
+        # reversed_proof = list(reversed(self.proof_lines))
+        # output_lines = []
+        # if self.top_level_rewrite_line:
+        #     output_lines.append(self.top_level_rewrite_line)
+        #     output_lines.extend(reversed_proof)
+        # else:
+        #     output_lines.extend(reversed_proof)
+        with open(filename, 'w') as f:
+            # for line in output_lines:
+            f.write(self.output_markdown())
+
+    def output_markdown(self):
         reversed_proof = list(reversed(self.proof_lines))
         output_lines = []
         if self.top_level_rewrite_line:
@@ -132,6 +146,84 @@ class SequentCalculus:
             output_lines.extend(reversed_proof)
         else:
             output_lines.extend(reversed_proof)
-        with open(filename, 'w') as f:
-            for line in output_lines:
-                f.write(line + '\n')
+
+        return '\n'.join(output_lines)
+
+    def parse_formula(self, expr: str):
+        expr = expr.strip()
+
+        # Remove outer parentheses
+        while expr.startswith("(") and expr.endswith(")"):
+            # check matching parens
+            depth = 0
+            for i, c in enumerate(expr):
+                if c == "(":
+                    depth += 1
+                elif c == ")":
+                    depth -= 1
+                    if depth == 0 and i != len(expr) - 1:
+                        break
+            else:
+                expr = expr[1:-1].strip()
+                continue
+            break
+
+        # Negation PW needs work, fix later complex to deal with (¬𝑝∨¬𝑞) which was previous stripped to ¬, parse_formuala (𝑝∨¬𝑞)
+        if expr and (expr[0] == "¬" or expr[0] == "~" or expr[0] == "!") and expr[1]=="(" or len(expr) == 2:
+            rest = expr[1:].strip()
+            return ('-', self.parse_formula(rest))
+
+        # Look for outermost binary operator (lowest precedence: > then | then &)
+        # Custom parser for non-nested scanning left to right for outermost ops
+        def find_op_outside_parens(string, op_list):
+            depth = 0
+            for i, c in enumerate(string):
+                if c == "(":
+                    depth += 1
+                elif c == ")":
+                    depth -= 1
+                elif depth == 0:
+                    # multi-char ops
+                    for op in sorted(op_list, key=len, reverse=True):
+                        if string[i:i + len(op)] == op:
+                            return i, op
+            return -1, None
+
+        # Operators (order: implications lowest precedence)
+        ops = [(">", ["→", "->", "⇒", "=>"]), ("|", ["∨", "|"]), ("&", ["∧", "&", "^"])]
+
+        for sym, patterns in ops:
+            idx, op = find_op_outside_parens(expr, patterns)
+            if idx != -1:
+                left = expr[:idx].strip()
+                right = expr[idx + len(op):].strip()
+                return (self.parse_formula(left), sym, self.parse_formula(right))
+
+        # Single variable
+        return expr.lower()
+
+    def parse_sequent(self, s: str):
+        # Split into left and right sides at top-level '⇒', '->', or '=>'
+        # We want only the outermost sequent split
+        match = re.search(r'(⇒|->|=>|→)', s)
+        if not match:
+            raise ValueError("No sequent '⇒' or '->' found.")
+        # Should add tests for the other operators before parsing
+
+        split_pos = match.start()
+        l = s[:split_pos].strip()
+        r = s[match.end():].strip()
+
+        # Handle multi-formula comma-separated on left and right sides
+        left = [self.parse_formula(part.strip()) for part in re.split(r",(?![^(]*\))", l) if
+                       part.strip()]
+        right = [self.parse_formula(part.strip()) for part in re.split(r",(?![^(]*\))", r) if
+                      part.strip()]
+
+        return set(left), set(right)
+
+    def prove_from_string(self, string_input, output_Markdown=True):
+        left, right = self.parse_sequent(string_input)
+        old_style_output=self.prove(left, right)
+
+        return self.output_markdown()
