@@ -17,6 +17,20 @@ sq = SequentCalculus()
 sq.prove({('-',('p','&',('-','q')))},{('p','>','q')})
 sq.write_to_file('example-proof.md')
 ```
+And
+```
+from sequent_calculus_prover import SequentCalculus
+from IPython.display import Markdown, display
+
+default = '((P∨Q)∨R),(¬P∨S),¬(Q∧¬S)⇒(R∨S)'
+user_sequent = input(f"Enter value [{default}]: ")
+if user_sequent.strip() == "":
+    user_sequent = default
+
+sq = SequentCalculus()
+markdown_seq_proof=sq.prove_from_string(user_sequent)
+display(Markdown(markdown_seq_proof))
+```
 
 The [created file](example-proof.md) can be viewed in many markdown readers showing the full logical symbols.
 
